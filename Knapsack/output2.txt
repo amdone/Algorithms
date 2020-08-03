@@ -1,0 +1,4 @@
+The max value is:20
+Selection is:
+id:1 all
+id:3 40

@@ -1,0 +1,49 @@
+/*
+ * graphChain.h
+ *
+ *  Created on: 2017年4月8日
+ *      Author: lsn
+ */
+
+#ifndef SRC_GRAPHCHAIN_
+#define SRC_GRAPHCHAIN_
+#include "chain"
+
+
+
+template <class T>
+class graphChain : public chain<T>
+{
+	friend class linkedDigraph;//因为要访问firstNode
+	//template<class E> friend class linkedWDigraph;//因为要访问firstNode
+   public:
+      T* eraseElement(int theVertex)//新增加的函数，该函数不应该返回指针
+      {// Delete node with element == theVertex. Return pointer to
+       // deleted element. Return NULL if no matching element.
+         chainNode<T> *current = this->firstNode,
+                      *trail = NULL; // one behind current
+        while (current != NULL && current->element != theVertex)
+         {
+            trail = current;
+            current = current->next;
+         }
+        if (current == NULL) // no match
+            return NULL;
+        T* theElement = &current->element; // save matching element
+        // remove current from chain
+         if (trail != NULL)
+            trail->next = current->next;
+         else
+            this->firstNode = current->next; // current is first node
+        delete current;//节点被删除了，怎么还能有current->element呢？
+         this->listSize--;
+         return theElement;
+      }
+     
+      chainNode<T> * getFisrtNode(){//因为要访问firstNode,如果前面不声明为友元，就要增加这个函数
+    	  return this->firstNode;
+      }
+      
+};
+
+#endif /* SRC_GRAPHCHAIN_ */
